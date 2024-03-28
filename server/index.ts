@@ -31,6 +31,7 @@ let isVerbose: boolean = true
  * @param isVerboseEnabled - Flag to enable or disable verbose logging
  * @param schemaPath - Path to the OpenAPI schema file
  * @param baseDir - Base directory for the OpenAPI schema file
+ * @param prefix - Prefix for API routes
  */
 export interface ServerConfig {
   host?: string
@@ -39,6 +40,7 @@ export interface ServerConfig {
   isVerboseEnabled?: boolean
   schemaPath?: string
   baseDir?: string
+  prefix?: string
   storageAdataper?: any
 }
 
@@ -119,7 +121,7 @@ export const startServer = async (configs?: ServerConfig): Promise<boolean> => {
       server.addHook('preHandler', configs.storageAdataper)
 
     // Register API routes
-    await server.register(v1Router, { prefix: '/v1' })
+    await server.register(v1Router, { prefix: configs?.prefix ?? '/v1' })
     // Start listening for requests
     await server
       .listen({
